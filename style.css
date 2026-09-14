@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  --pixel-font: 'Press Start 2P', monospace;
+  --pixel-bg: #1a1016;
+  --pixel-sand: #e7a858;
+  --pixel-sand-dark: #b86f28;
+  --pixel-frame-light: #e0c8a0;
+  --pixel-frame-dark: #503018;
+  --pixel-gold: #f8b800;
+  --pixel-red: #d82800;
+  --pixel-green: #00a800;
+  --pixel-black: #000000;
+  --pixel-white: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--pixel-bg);
+  font-family: var(--pixel-font);
+  color: var(--pixel-white);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* -------------------------------------------------------------
+   TELA DE ABERTURA E CARREGAMENTO DE CACTO
+------------------------------------------------------------- */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  background-color: var(--pixel-black);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.splash-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.pixel-logo { animation: floatAnim 3s ease-in-out infinite; }
+.logo-icon { font-size: clamp(2.5rem, 8vw, 4rem); display: block; margin-bottom: 10px; }
+.splash-title { font-size: clamp(0.8rem, 3vw, 1.2rem); color: var(--pixel-gold); line-height: 1.4; }
+.splash-subtitle { font-size: clamp(0.35rem, 1.5vw, 0.5rem); color: var(--pixel-frame-light); }
+
+/* ESTILOS DO CACTO RELLENO */
+.cactus-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.cactus-wrapper {
+  position: relative;
+  font-size: 4rem;
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+}
+
+.cactus-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  filter: grayscale(100%);
+}
+
+.cactus-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  overflow: hidden;
+  transition: height 0.1s linear;
+}
+
+.cactus-fg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.splash-loading-status {
+  margin-top: 12px;
+  font-size: clamp(0.4rem, 1.5vw, 0.55rem);
+  color: var(--pixel-gold);
+}
+
+.fullscreen-btn {
+  margin-top: 15px;
+  font-family: var(--pixel-font);
+  background: var(--pixel-gold);
+  color: var(--pixel-black);
+  border: none;
+  padding: 10px 15px;
+  font-size: clamp(0.4rem, 1.5vw, 0.55rem);
+  cursor: pointer;
+}
+
+/* -------------------------------------------------------------
+   HUD SUPERIOR & INFERIOR
+------------------------------------------------------------- */
+.top-hud {
+  width: 100%;
+  min-height: 50px;
+  background: var(--pixel-black);
+  border-bottom: 4px solid var(--pixel-gold);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 15px;
+  z-index: 10;
+}
+
+.biom-target { display: flex; align-items: center; gap: 8px; background: #281808; padding: 4px 8px; border: 2px solid var(--pixel-frame-dark); }
+.biom-target .icon { font-size: 0.8rem; }
+.biom-target .info { display: flex; flex-direction: column; }
+.biom-target .label { font-size: 0.35rem; color: #a08060; }
+.biom-target .value { font-size: 0.5rem; color: var(--pixel-gold); }
+
+.lobby-title { font-size: clamp(0.5rem, 1.8vw, 0.85rem); color: var(--pixel-gold); text-align: center; }
+
+.resources-bar { display: flex; gap: 8px; }
+.resource-item { display: flex; align-items: center; gap: 4px; font-size: clamp(0.35rem, 1.2vw, 0.5rem); background: #281808; padding: 4px 6px; border: 2px solid var(--pixel-frame-dark); }
+
+.bottom-hud {
+  width: 100%;
+  min-height: 65px;
+  background: var(--pixel-black);
+  border-top: 4px solid var(--pixel-gold);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 15px;
+  z-index: 10;
+}
+
+.summary-text .label { font-size: 0.35rem; color: #a08060; }
+.summary-text .name { font-size: clamp(0.5rem, 1.5vw, 0.8rem); color: var(--pixel-gold); }
+
+.equipment-slots { display: flex; gap: 6px; }
+.eq-slot { width: clamp(30px, 5vw, 40px); height: clamp(30px, 5vw, 40px); background: #281808; border: 2px solid var(--pixel-frame-dark); display: flex; justify-content: center; align-items: center; font-size: clamp(0.7rem, 2vw, 1rem); }
+
+.start-btn {
+  font-family: var(--pixel-font);
+  background: var(--pixel-gold);
+  color: var(--pixel-black);
+  border: none;
+  padding: 8px 12px;
+  font-size: clamp(0.45rem, 1.5vw, 0.65rem);
+  cursor: pointer;
+}
+
+.start-btn.disabled { background: #403020; color: #706050; cursor: not-allowed; }
+
+/* -------------------------------------------------------------
+   CARDS DE PERSONAGENS
+------------------------------------------------------------- */
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 12px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+
+.card-character {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  max-height: 500px;
+  background: var(--pixel-sand);
+  border: 3px solid var(--pixel-black);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-character.selected { border-color: var(--pixel-gold); }
+
+.character-portrait-container { position: absolute; inset: 0; z-index: 1; }
+.character-portrait { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.fallback-portrait { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: var(--pixel-sand-dark); font-size: 2rem; }
+
+.card-overlay-gradient { position: absolute; bottom: 0; width: 100%; height: 70%; background: linear-gradient(to top, var(--pixel-black) 75%, transparent 100%); z-index: 2; }
+.card-top-badge { position: relative; z-index: 3; padding: 6px; }
+.archetype-tag { background: var(--pixel-black); color: var(--pixel-gold); border: 1px solid var(--pixel-gold); padding: 2px 4px; font-size: 0.35rem; }
+
+.card-bottom-info { position: relative; z-index: 3; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+.char-name-box h2 { font-size: clamp(0.6rem, 2vw, 0.9rem); color: var(--pixel-gold); }
+.char-title { font-size: 0.35rem; color: #a08060; }
+
+.stats-container { display: flex; flex-direction: column; gap: 4px; background: #180800; border: 1px solid var(--pixel-frame-dark); padding: 4px; }
+.stat-item { display: flex; align-items: center; justify-content: space-between; font-size: 0.35rem; }
+.stat-bar-bg { flex: 1; height: 4px; background: #402000; margin: 0 4px; }
+.stat-bar-fill { height: 100%; background: var(--pixel-gold); }
+.stat-val { color: var(--pixel-gold); width: 20px; text-align: right; }
+
+.perk-box { font-size: 0.35rem; color: #80f080; background: #002800; border: 1px solid var(--pixel-green); padding: 4px; }
+
+/* -------------------------------------------------------------
+   CONTAINER E CANVAS
+------------------------------------------------------------- */
+.canvas-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--pixel-black);
+  z-index: 50;
+  padding: 10px;
+}
+
+canvas#gameCanvas {
+  width: 100%;
+  height: 100%;
+  max-width: 960px;
+  max-height: 640px;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+  border: 4px solid var(--pixel-gold);
+  background-color: var(--pixel-sand);
+}
+
+.hidden { display: none !important; }
+
+/* -------------------------------------------------------------
+   AJUSTES PARA DISPOSITIVOS MÓVEIS (CARDS UM EM CIMA DO OUTRO)
+------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+    overflow-y: auto;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 15px 10px;
+  }
+
+  .card-character {
+    width: 100%;
+    max-width: 280px;
+    height: 220px;
+    min-height: 220px;
+    flex: none;
+  }
+
+  .lobby-title { display: none; }
+  .equipment-slots { display: none; }
+}
+
+@keyframes floatAnim {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
