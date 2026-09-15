@@ -1,4 +1,5 @@
 let selectedCharacter = null;
+let isPaused = false;
 
 function enableFullscreen() {
   const docEl = document.documentElement;
@@ -14,7 +15,85 @@ function enableFullscreen() {
   }
 }
 
+function setupAutoFullscreen() {
+  const enterFullscreenOnFirstInteraction = () => {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      enableFullscreen();
+    }
+    window.removeEventListener('click', enterFullscreenOnFirstInteraction);
+    window.removeEventListener('keydown', enterFullscreenOnFirstInteraction);
+    window.removeEventListener('touchstart', enterFullscreenOnFirstInteraction);
+  };
+
+  window.addEventListener('click', enterFullscreenOnFirstInteraction);
+  window.addEventListener('keydown', enterFullscreenOnFirstInteraction);
+  window.addEventListener('touchstart', enterFullscreenOnFirstInteraction);
+}
+
+function setupPauseOnExitFullscreen() {
+  const handleFullscreenChange = () => {
+    const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
+
+    if (!isFullscreen) {
+      triggerPauseGame('Jogo Pausado: Tela cheia desativada');
+    }
+  };
+
+  document.addEventListener('fullscreenchange', handleFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      triggerPauseGame('Jogo Pausado: Você saiu da aba');
+    }
+  });
+}
+
+function triggerPauseGame(reason = 'Jogo Pausado') {
+  const canvasContainer = document.getElementById('canvas-container');
+  if (isPaused || canvasContainer.classList.contains('hidden')) return;
+
+  isPaused = true;
+
+  let pauseOverlay = document.getElementById('pause-overlay');
+  
+  if (!pauseOverlay) {
+    const pauseHTML = `
+      <div id="pause-overlay" class="splash-screen" style="z-index: 300; opacity: 1;">
+        <div class="splash-card">
+          <h1 class="splash-title">⏸️ JOGO PAUSADO</h1>
+          <p id="pause-reason" class="splash-subtitle" style="margin-bottom: 10px;"></p>
+          <button class="fullscreen-btn" onclick="resumeGame()">
+            ▶️ CONTINUAR (TELA CHEIA)
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', pauseHTML);
+    pauseOverlay = document.getElementById('pause-overlay');
+  } else {
+    pauseOverlay.classList.remove('hidden');
+    pauseOverlay.style.opacity = '1';
+  }
+
+  const reasonElement = document.getElementById('pause-reason');
+  if (reasonElement) reasonElement.innerText = reason;
+}
+
+function resumeGame() {
+  const pauseOverlay = document.getElementById('pause-overlay');
+  if (pauseOverlay) {
+    pauseOverlay.classList.add('hidden');
+  }
+
+  isPaused = false;
+  enableFullscreen();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  setupAutoFullscreen();
+  setupPauseOnExitFullscreen();
+
   const splashScreen = document.getElementById('splash-screen');
   const cactusFill = document.getElementById('splash-cactus-fill');
   const statusElement = document.getElementById('splash-loading-status');
@@ -25,12 +104,17 @@ document.addEventListener('DOMContentLoaded', () => {
     fullscreenBtn.classList.remove('hidden');
   }
 
-  const totalDuration = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
-  const intervalTime = 50;
+  document.querySelectorAll('.stat-bar-fill').forEach(bar => {
+    const targetWidth = bar.style.width;
+    bar.style.setProperty('--target-width', targetWidth);
+  });
+
+  const totalDuration = 3500;
+  const intervalTime = 40;
   let elapsedTime = 0;
 
   const initialInterval = setInterval(() => {
-    elapsedTime += intervalTime + Math.floor(Math.random() * 20);
+    elapsedTime += intervalTime;
     const percentage = Math.min(Math.round((elapsedTime / totalDuration) * 100), 100);
 
     if (cactusFill) cactusFill.style.height = percentage + '%';
@@ -39,11 +123,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (percentage >= 100) {
       clearInterval(initialInterval);
 
-      if (splashScreen) splashScreen.style.display = 'none';
+      if (splashScreen) {
+        splashScreen.style.opacity = '0';
+        setTimeout(() => {
+          splashScreen.style.display = 'none';
 
-      document.querySelector('.top-hud').classList.remove('hidden');
-      document.getElementById('character-select-screen').classList.remove('hidden');
-      document.querySelector('.bottom-hud').classList.remove('hidden');
+          document.querySelector('.top-hud').classList.remove('hidden');
+          document.getElementById('character-select-screen').classList.remove('hidden');
+          document.querySelector('.bottom-hud').classList.remove('hidden');
+
+          setTimeout(() => {
+            document.querySelectorAll('.stats-container').forEach(container => {
+              container.classList.add('stats-animated');
+            });
+          }, 500);
+
+        }, 400);
+      }
     }
   }, intervalTime);
 });
@@ -58,7 +154,17 @@ function chooseCharacter(name, color, imagePath, event) {
     event.currentTarget.classList.add('selected');
   }
 
-  document.getElementById('hud-character-name').innerText = name.toUpperCase();
+  const nameHud = document.getElementById('hud-character-name');
+  if (nameHud) {
+    nameHud.style.opacity = '0';
+    nameHud.style.transform = 'translateY(-5px)';
+    
+    setTimeout(() => {
+      nameHud.innerText = name.toUpperCase();
+      nameHud.style.opacity = '1';
+      nameHud.style.transform = 'translateY(0)';
+    }, 150);
+  }
 
   const startBtn = document.getElementById('start-btn');
   startBtn.classList.remove('disabled');
@@ -69,10 +175,10 @@ function confirmStart() {
   if (!selectedCharacter) return;
 
   const loadingHTML = `
-    <div id="loading-screen" class="splash-screen" style="z-index: 150;">
-      <div class="splash-content">
+    <div id="loading-screen" class="splash-screen" style="z-index: 150; opacity: 1;">
+      <div class="splash-card">
         <h1 class="splash-title">ENTRANDO NO DESERTO...</h1>
-        <p class="splash-subtitle">💡 Mantenha a hidratação e busque os pontos de sombra!</p>
+        <p class="splash-subtitle" style="text-transform: uppercase;">💡 Mantenha a hidratação e busque pontos de sombra!</p>
         <div class="cactus-loading-container">
           <div class="cactus-wrapper">
             <span class="cactus-bg">🌵</span>
@@ -88,8 +194,8 @@ function confirmStart() {
 
   document.body.insertAdjacentHTML('beforeend', loadingHTML);
 
-  const duration = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
-  const intervalTime = 50;
+  const duration = 4000;
+  const intervalTime = 40;
   let elapsedTime = 0;
 
   const progressInterval = setInterval(() => {
@@ -105,14 +211,19 @@ function confirmStart() {
     if (elapsedTime >= duration) {
       clearInterval(progressInterval);
 
-      document.getElementById('character-select-screen').classList.add('hidden');
-      document.querySelector('.top-hud').classList.add('hidden');
-      document.querySelector('.bottom-hud').classList.add('hidden');
-
       const loadingScreen = document.getElementById('loading-screen');
-      if (loadingScreen) loadingScreen.remove();
+      if (loadingScreen) {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+          loadingScreen.remove();
 
-      startPhase1();
+          document.getElementById('character-select-screen').classList.add('hidden');
+          document.querySelector('.top-hud').classList.add('hidden');
+          document.querySelector('.bottom-hud').classList.add('hidden');
+
+          startPhase1();
+        }, 400);
+      }
     }
   }, intervalTime);
 }

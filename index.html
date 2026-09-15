@@ -4,13 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>O Guardião dos Biomas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <!-- BG PARTICLES/LIGHT EFFECT -->
+  <div class="ambient-glow"></div>
+
   <!-- TELA DE ABERTURA / CARREGAMENTO INICIAL -->
   <div id="splash-screen" class="splash-screen">
-    <div class="splash-content">
+    <div class="splash-card">
       <div class="pixel-logo">
         <span class="logo-icon">🌳</span>
         <h1 class="splash-title">O GUARDIÃO DOS BIOMAS</h1>
@@ -37,9 +43,9 @@
   <!-- HUD SUPERIOR -->
   <header class="top-hud hidden">
     <div class="biom-target">
-      <span class="icon">🌵</span>
+      <div class="icon-wrapper">🌵</div>
       <div class="info">
-        <span class="label">BIOMA</span>
+        <span class="label">BIOMA ATUAL</span>
         <span class="value">Deserto</span>
       </div>
     </div>
@@ -48,13 +54,16 @@
 
     <div class="resources-bar">
       <div class="resource-item" title="Moedas de Ouro">
-        <span class="res-icon">🪙</span> 1,250
+        <span class="res-icon">🪙</span>
+        <span class="res-val">1,250</span>
       </div>
       <div class="resource-item" title="Sementes Raras">
-        <span class="res-icon">🌱</span> 18
+        <span class="res-icon">🌱</span>
+        <span class="res-val">18</span>
       </div>
-      <div class="resource-item" title="Nível da Conta">
-        <span class="res-icon">⭐</span> Nv. 5
+      <div class="resource-item level-item" title="Nível da Conta">
+        <span class="res-icon">⭐</span>
+        <span class="res-val">Nv. 5</span>
       </div>
     </div>
   </header>
@@ -72,7 +81,7 @@
       </div>
       <div class="card-overlay-gradient"></div>
       <div class="card-top-badge">
-        <span class="archetype-tag">⚡ AGILIDADE</span>
+        <span class="archetype-tag tag-speed">⚡ AGILIDADE</span>
       </div>
       <div class="card-bottom-info">
         <div class="char-name-box">
@@ -81,17 +90,17 @@
         </div>
         <div class="stats-container">
           <div class="stat-item">
-            <span class="stat-name">Vel:</span>
+            <span class="stat-name">Velocidade</span>
             <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 90%;"></div></div>
             <span class="stat-val">90%</span>
           </div>
           <div class="stat-item">
-            <span class="stat-name">Res:</span>
+            <span class="stat-name">Resistência</span>
             <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 75%;"></div></div>
             <span class="stat-val">75%</span>
           </div>
           <div class="stat-item">
-            <span class="stat-name">Con:</span>
+            <span class="stat-name">Conhecimento</span>
             <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 60%;"></div></div>
             <span class="stat-val">60%</span>
           </div>
@@ -103,14 +112,14 @@
     <!-- CARD 2: BEATRIZ -->
     <div class="card-character" onclick="chooseCharacter('Beatriz', '#06d6a0', 'assets/beatriz.png', event)">
       <div class="character-portrait-container">
-        <img src="assets/beatriz.png" alt="Beatriz" class="character-portrait" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <img src="Personagens/Beatriz.png" alt="Beatriz" class="character-portrait" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
         <div class="fallback-portrait" style="display: none;">
           <span>🌿</span>
         </div>
       </div>
       <div class="card-overlay-gradient"></div>
       <div class="card-top-badge">
-        <span class="archetype-tag">🔬 BIOLOGIA</span>
+        <span class="archetype-tag tag-bio">🔬 BIOLOGIA</span>
       </div>
       <div class="card-bottom-info">
         <div class="char-name-box">
@@ -119,17 +128,17 @@
         </div>
         <div class="stats-container">
           <div class="stat-item">
-            <span class="stat-name">Vel:</span>
+            <span class="stat-name">Velocidade</span>
             <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 65%;"></div></div>
             <span class="stat-val">65%</span>
           </div>
           <div class="stat-item">
-            <span class="stat-name">Res:</span>
+            <span class="stat-name">Resistência</span>
             <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 70%;"></div></div>
             <span class="stat-val">70%</span>
           </div>
           <div class="stat-item">
-            <span class="stat-name">Con:</span>
+            <span class="stat-name">Conhecimento</span>
             <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 100%;"></div></div>
             <span class="stat-val">100%</span>
           </div>
@@ -148,7 +157,7 @@
       </div>
       <div class="card-overlay-gradient"></div>
       <div class="card-top-badge">
-        <span class="archetype-tag">🛡️ SOBREVIVÊNCIA</span>
+        <span class="archetype-tag tag-survival">🛡️ SOBREVIVÊNCIA</span>
       </div>
       <div class="card-bottom-info">
         <div class="char-name-box">
@@ -157,17 +166,17 @@
         </div>
         <div class="stats-container">
           <div class="stat-item">
-            <span class="stat-name">Vel:</span>
+            <span class="stat-name">Velocidade</span>
             <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 70%;"></div></div>
             <span class="stat-val">70%</span>
           </div>
           <div class="stat-item">
-            <span class="stat-name">Res:</span>
+            <span class="stat-name">Resistência</span>
             <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 95%;"></div></div>
             <span class="stat-val">95%</span>
           </div>
           <div class="stat-item">
-            <span class="stat-name">Con:</span>
+            <span class="stat-name">Conhecimento</span>
             <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 80%;"></div></div>
             <span class="stat-val">80%</span>
           </div>
@@ -195,7 +204,7 @@
     </div>
 
     <button id="start-btn" class="start-btn disabled" onclick="confirmStart()" disabled>
-      <span>INICIAR</span> ➔
+      <span>INICIAR</span> <span class="arrow">➔</span>
     </button>
   </footer>
 
