@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>O Guardião dos Biomas</title>
+  <meta name="description" content="RPG educativo de exploração em pixel art.">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+  <div id="app">
+    <section id="loading" class="screen active">
+      <div class="loading-mark"><span>G</span><i></i></div>
+      <p class="eyebrow">PROJETO BIOBIOMAS · 01</p>
+      <h1>O Guardião<br><em>dos Biomas</em></h1>
+      <div class="loader"><span id="loadBar"></span></div>
+      <small id="loadText">Preparando o diário...</small>
+    </section>
+
+    <section id="profile" class="screen">
+      <div class="panel profile-panel">
+        <div class="panel-kicker">PRIMEIRO PASSO</div>
+        <h2>Quem será o<br><em>explorador?</em></h2>
+        <p>Crie seu perfil. Seu progresso ficará salvo neste navegador.</p>
+        <form id="profileForm">
+          <label for="profileName">Nome do explorador</label>
+          <input id="profileName" maxlength="18" autocomplete="off" placeholder="Digite seu nome">
+          <button class="primary" type="submit">ENTRAR NA EXPEDIÇÃO <span>→</span></button>
+        </form>
+      </div>
+    </section>
+
+    <section id="lobby" class="screen">
+      <header class="topbar">
+        <div class="brand"><span>G</span><strong>GUARDIÃO<span>.</span></strong></div>
+        <div class="profile-chip"><b id="lobbyName">EXPLORADOR</b><small>NÍVEL 01</small></div>
+      </header>
+      <main class="lobby-grid">
+        <div class="lobby-copy">
+          <p class="eyebrow">DIÁRIO DE CAMPO · 001</p>
+          <h2>O mundo está<br><em>esperando.</em></h2>
+          <p class="lede">Explore ambientes extremos, conheça animais, responda perguntas e reúna os fragmentos que revelam os segredos da vida.</p>
+          <button id="startButton" class="primary huge">COMEÇAR EXPEDIÇÃO <span>↗</span></button>
+        </div>
+        <div class="lobby-card">
+          <div class="card-line"></div>
+          <p class="eyebrow">MAPA DA EXPEDIÇÃO</p>
+          <div class="map-route">
+            <div class="map-node unlocked"><b>01</b><span>DESERTO</span><small>Fragmento do Calor</small></div>
+            <div class="route-line"></div>
+            <div class="map-node locked"><b>02</b><span>FLORESTA</span><small>Bloqueado</small></div>
+            <div class="route-line"></div>
+            <div class="map-node locked"><b>03</b><span>SAVANA</span><small>Bloqueado</small></div>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <section id="select" class="screen">
+      <div class="select-wrap">
+        <div>
+          <p class="eyebrow">ESCOLHA SEU EXPLORADOR</p>
+          <h2>Três formas de<br><em>ver o mundo.</em></h2>
+        </div>
+        <div id="characterCards" class="character-cards"></div>
+        <button id="confirmCharacter" class="primary huge" disabled>CONFIRMAR EXPLORADOR <span>→</span></button>
+      </div>
+    </section>
+
+    <section id="game" class="screen game-screen">
+      <canvas id="gameCanvas" width="960" height="540"></canvas>
+      <div class="hud">
+        <div class="hud-profile"><div class="avatar">G</div><div><b id="hudName">EXPLORADOR</b><small>EXPEDIÇÃO 01</small></div></div>
+        <div class="hud-objective"><small>OBJETIVO ATUAL</small><b id="objective">ENCONTRE O PORTAL</b></div>
+        <div class="hud-stats"><span class="life-stat">♥ <b id="hearts">3</b></span><span>◆ <b id="coins">0</b></span><button id="pauseBtn" aria-label="Pausar">Ⅱ</button></div>
+      </div>
+      <div id="dialogue" class="dialogue hidden">
+        <div class="dialogue-tag" id="dialogueTag">ENCONTRO</div>
+        <div class="dialogue-box"><div class="portrait" id="dialoguePortrait">?</div><div><h3 id="dialogueName">Animal</h3><p id="dialogueText"></p></div></div>
+        <div id="answers" class="answers"></div>
+        <button id="dialogueNext" class="dialogue-next">CONTINUAR <span>→</span></button>
+      </div>
+      <div id="pause" class="overlay hidden"><div class="pause-card"><p class="eyebrow">EXPEDIÇÃO PAUSADA</p><h2>Diário em<br><em>espera.</em></h2><button id="resumeBtn" class="primary">CONTINUAR <span>→</span></button><button id="restartBtn" class="ghost">REINICIAR FASE</button></div></div>
+      <div class="mobile-controls"><button data-key="ArrowLeft">←</button><button data-key="Space">●</button><button data-key="ArrowRight">→</button></div>
+    </section>
+
+    <section id="result" class="screen">
+      <div class="result-card">
+        <div class="fragment">◆</div>
+        <p class="eyebrow">FRAGMENTO RECUPERADO</p>
+        <h2>Fragmento<br><em>do Calor</em></h2>
+        <p>Você concluiu a primeira expedição. O conhecimento abre o próximo caminho.</p>
+        <button id="backLobby" class="primary huge">VOLTAR AO LOBBY <span>→</span></button>
+      </div>
+    </section>
+  </div>
+  <script src="js/data/characters.js"></script>
+  <script src="js/data/questions.js"></script>
+  <script src="js/core/Input.js"></script>
+  <script src="js/core/Collision.js"></script>
+  <script src="js/core/Camera.js"></script>
+  <script src="js/core/SaveSystem.js"></script>
+  <script src="js/entities/Player.js"></script>
+  <script src="js/entities/Animal.js"></script>
+  <script src="js/entities/Portal.js"></script>
+  <script src="js/systems/DialogueSystem.js"></script>
+  <script src="js/screens/Screens.js"></script>
+  <script src="js/core/Game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
