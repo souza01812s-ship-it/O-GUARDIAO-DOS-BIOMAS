@@ -1,0 +1,1 @@
+window.Collision={rectsOverlap(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y},resolveVertical(o,platforms){for(const p of platforms){if(this.rectsOverlap(o,p)&&o.vy>=0&&o.y+o.h-o.vy<=p.y+4){o.y=p.y-o.h;o.vy=0;o.grounded=true;return true}}return false}};

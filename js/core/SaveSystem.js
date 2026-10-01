@@ -1,0 +1,1 @@
+window.SaveSystem={key:"guardiao_profile_v1",load(){try{return JSON.parse(localStorage.getItem(this.key)||"null")}catch{return null}},save(data){localStorage.setItem(this.key,JSON.stringify(data))}};
